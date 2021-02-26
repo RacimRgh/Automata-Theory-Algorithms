@@ -54,3 +54,18 @@ class Algorithms(object):
                     print("Not valid!")
                 else:
                     print("String accepted")
+
+    def synchronisation(self):
+        print("syncho")
+
+    def determinisation(self):
+        print("det")
+
+    def minimisation(self):
+        print("min")
+
+    def equivalence(self):
+        print("eq")
+
+    def thompson(self):
+        print("thomson")
