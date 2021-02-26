@@ -17,9 +17,6 @@ def main():
     input_files = (
         entry for entry in path.iterdir() if entry.is_file())
 
-    # for item in input_files:
-    #     print(item)
-
     # Parcours récursif de tout les fichiers dans le dossier Files
     # 1 fichier == 1 langage/graphe
     # for filename in glob.glob(os.path.join(path, '*.txt')):
@@ -43,11 +40,15 @@ def main():
             # print(finalStates)
             alphabet = parsedFile.getAlphabet()
             # print(alphabet)
+            states = parsedFile.getStates()
+            print(states)
+            initialState = parsedFile.getInitialState()
+            # print(initialState)
 
             gr = {}
             gr['alphabet'] = alphabet
-            gr['states'] = finalStates
-            gr['initial_state'] = finalStates
+            gr['states'] = states
+            gr['initial_state'] = initialState
             gr['accepting_states'] = finalStates
             gr['transitions'] = nodes
             print(

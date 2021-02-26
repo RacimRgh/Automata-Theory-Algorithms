@@ -9,6 +9,8 @@ class Parser(object):
         self.__m_Nodes = []
         self.__m_finalStates = []
         self.__m_alphabet = []
+        self.__m_states = []
+        self.__m_initialState = []
 
     def parse(self):
         counter = 0
@@ -20,11 +22,24 @@ class Parser(object):
                 # string to ints
                 self.__m_finalStates = [int(i) for i in self.__m_finalStates]
             # store transitions
+            elif (counter == 1):
+                self.__m_initialState = [int(line.rstrip().split(' ')[0])]
+                line = line.rstrip().split(' ')
+                self.__m_states.append(line[0])
+                if (line[0] != line[2]):
+                    self.__m_states.append(line[2])
             else:
-                line = line.split(' ')
+                line = line.rstrip().split(' ')
+                if (line[0] not in self.__m_states):
+                    self.__m_states.append(line[0])
+                if (line[2] not in self.__m_states):
+                    self.__m_states.append(line[2])
+
                 self.__m_Nodes.append(Graph(line[0], line[1], line[2]))
+
                 if (line[1] not in self.__m_alphabet):
                     self.__m_alphabet.append(line[1])
+
             counter += 1
         self.close()
 
@@ -40,3 +55,9 @@ class Parser(object):
 
     def getNodes(self):
         return self.__m_Nodes
+
+    def getStates(self):
+        return self.__m_states
+
+    def getInitialState(self):
+        return self.__m_initialState
