@@ -1,11 +1,9 @@
 #
 #   Python DFA
 #
-from Graph import *
-from Parser import *
+from Parser import Parser
 from Algorithms import *
 import json
-import glob
 import os
 from os import listdir
 from os.path import isfile, join
@@ -19,7 +17,6 @@ def main():
 
     # Parcours récursif de tout les fichiers dans le dossier Files
     # 1 fichier == 1 langage/graphe
-    # for filename in glob.glob(os.path.join(path, '*.txt')):
     for filename in input_files:
         with open(os.path.join(os.getcwd(), filename), 'r') as f:  # ouvrir en mode lecture
             print(filename)
@@ -30,20 +27,24 @@ def main():
             parsedFile = Parser(f)
             parsedFile.parse()
 
+            initialState = parsedFile.getInitialState()
+            print('Etat initial: ', initialState)
+
+            finalStates = parsedFile.getFinalStates()
+            print('Etats finaux: ', finalStates)
+
+            alphabet = parsedFile.getAlphabet()
+            print('Alphabet: ', alphabet)
+
+            states = parsedFile.getStates()
+            print('Etats: ', states)
+
             # Récupérer les transitions
             # [ ["from", "value", "to"], .... ["from","value", "to"] ]
             nodes = parsedFile.getNodes()
             nodes = [[str(node.mFrom), str(node.mValue), str(node.mGoto)]
                      for node in nodes]
-            # print(nodes)
-            finalStates = parsedFile.getFinalStates()
-            # print(finalStates)
-            alphabet = parsedFile.getAlphabet()
-            # print(alphabet)
-            states = parsedFile.getStates()
-            print(states)
-            initialState = parsedFile.getInitialState()
-            # print(initialState)
+            print('Transitions:', nodes)
 
             gr = {}
             gr['alphabet'] = alphabet
@@ -54,9 +55,12 @@ def main():
             print(
                 '_____________________________________________\n___________________________________')
 
+            # Créer un fichier json contenant le langage lu
             with open(os.path.join(os.getcwd(), "..\\Results\\"+name), 'w') as outfile:
                 json.dump(gr, outfile)
 
+            # Exécuter les algorithmes
+            # TO DO
             Algorithms(parsedFile)
 
 
