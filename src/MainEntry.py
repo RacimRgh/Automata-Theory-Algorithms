@@ -11,13 +11,12 @@ from pathlib import Path
 import codecs
 
 
-def getGraph(graph):
+def getgraph(graph):
+    initial_state = graph.getInitialState()
+    print('Etat initial: ', initial_state)
 
-    initialState = graph.getInitialState()
-    print('Etat initial: ', initialState)
-
-    finalStates = graph.getFinalStates()
-    print('Etats finaux: ', finalStates)
+    final_states = graph.getFinalStates()
+    print('Etats finaux: ', final_states)
 
     alphabet = graph.getAlphabet()
     print('Alphabet: ', alphabet)
@@ -33,12 +32,8 @@ def getGraph(graph):
         print(node)
     # print('Transitions:', nodes)
 
-    gr = {}
-    gr['alphabet'] = alphabet
-    gr['states'] = states
-    gr['initial_state'] = initialState
-    gr['accepting_states'] = finalStates
-    gr['transitions'] = nodes
+    gr = {'alphabet': alphabet, 'states': states, 'initial_state': initial_state, 'accepting_states': final_states,
+          'transitions': nodes}
     print(
         '_____________________________________________\n___________________________________')
     return gr
@@ -46,7 +41,7 @@ def getGraph(graph):
 
 def write_to_json_file(name, json_graph):
     # Créer un fichier json contenant le langage lu
-    with open(os.path.join(os.getcwd(), "..\\Results\\"+name), 'w') as outfile:
+    with open(os.path.join(os.getcwd(), "..\\Results\\" + name), 'w') as outfile:
         json.dump(json_graph, outfile, indent=4)
         outfile.close()
 
@@ -67,17 +62,23 @@ def main():
             name = filename.name.split('.')[0] + '.json'
             print(name)
 
-            json_graph = getGraph(graph)
-
+            json_graph = getgraph(graph)
             write_to_json_file(name, json_graph)
 
             # Exécuter les algorithmes
-            # TO DO
+            # determinisation
             algos = Algorithms(graph)
+            det = algos.determinisation()
+            det_json = getgraph(det)
+            write_to_json_file("abab-det.json", det_json)
+
+            # acceptation
             # algos.acceptation()
-            eps = algos.synchronisation()
-            eps_json = getGraph(eps)
-            write_to_json_file("abab-sans-epsilon.json", eps_json)
+
+            # synchronisation
+            # eps = algos.synchronisation()
+            # eps_json = getgraph(eps)
+            # write_to_json_file("abab-sans-epsilon.json", eps_json)
 
 
 if __name__ == '__main__':

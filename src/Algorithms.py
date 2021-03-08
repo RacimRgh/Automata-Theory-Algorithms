@@ -1,4 +1,6 @@
 from Node import *
+import collections
+import queue
 
 
 class Algorithms(object):
@@ -59,7 +61,7 @@ class Algorithms(object):
                 else:
                     print("String accepted")
 
-    # algorithme calculant un automate équivalent au premier, sans "epsilon-transitions.
+    # algorithme calculant un automate équivalent au premier, sans "epsilon-transitions".
     def synchronisation(self):
         print("syncho")
         nodes = self.__m_graph.getNodes()
@@ -76,8 +78,51 @@ class Algorithms(object):
                 nodes.remove(node)
         return self.__m_graph
 
+    # algorithme calculant un automate déterministe équivalent au premier.
     def determinisation(self):
-        print("det")
+        print("determinisation")
+        nodes = self.__m_graph.getNodes()
+        currentNode = self.__m_graph.getInitialState()
+        states = self.__m_graph.getStates()
+        states_queue = queue.Queue()
+        states_queue.put(currentNode)
+        node_treated = []
+        while (not states_queue.empty()):
+            currentNode = states_queue.get()
+            for node in nodes:
+                # on parcours les transitions depuis l'état en cours de traitement
+                if node.mFrom == currentNode and node not in node_treated:
+                    # récupérer la liste des transitions possible depuis l'état actuel
+                    current_node_transitions = self.__m_graph.getStateTransitions(
+                        node.mFrom)
+                    # liste des transitions non déterministes
+                    # (ie: plusieurs déplacements possibles avec la même lettre depuis un état)
+                    non_det_trans = [
+                        tr for tr in current_node_transitions if current_node_transitions.count(tr) > 1]
+
+                    # si liste des dupliqués non vide alors déterminiser
+                    # parcourir la liste des transitions non déterministes de l'état courant
+                    # ajouter un nouvel état
+                    if len(non_det_trans):
+                        new_state = ''
+                        for trans in non_det_trans:
+                            new_state += trans.mGoto
+                            nodes.remove(trans)
+                            print(self.__m_graph.nodeToString(trans))
+                        print(new_state)
+                        states.append(new_state)
+                        nodes.append(
+                            Node(currentNode, trans.mValue, new_state))
+                        states_queue.put(new_state)
+                    # Sinon ajout les succésseurs à la liste des états à traiter
+                    else:
+                        states_queue.put(node.mGoto)
+
+                    currentNode = node.mGoto
+                    node_treated.append(node)
+            for node in nodes:
+                print(self.__m_graph.nodeToString(node))
+        return self.__m_graph
 
     # algorithme calculant un automate déterministe minimal équivalent au premier.
     def minimisation(self):

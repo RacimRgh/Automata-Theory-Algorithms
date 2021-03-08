@@ -5,3 +5,6 @@ class Node(object):
         self.mFrom = str(value)
         self.mValue = str(mFrom)
         self.mGoto = str(goto)
+
+    def __eq__(self, other):
+        return (self.mFrom == other.mFrom) & (self.mValue == other.mValue)
