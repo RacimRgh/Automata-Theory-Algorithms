@@ -2,7 +2,7 @@
 #   Python DFA
 #
 from Parser import Parser
-from Algorithms import *
+from Algorithms import acceptation, determinisation, synchronisation
 import json
 import os
 from os import listdir
@@ -67,8 +67,7 @@ def main():
 
             # Exécuter les algorithmes
             # determinisation
-            algos = Algorithms(graph)
-            det = algos.determinisation()
+            det = determinisation(graph)
             det_json = getgraph(det)
             write_to_json_file("abab-det.json", det_json)
 
