@@ -1,9 +1,11 @@
+from Parser import *
 from Node import *
 import collections
 import queue
 
-
 # algorithme prenant un automate déterministe et un mot, et décidant si le mot est accepté par l'automate.
+
+
 def acceptation(graph):
     # parse file and store states
     nodes = graph.getNodes()
@@ -81,11 +83,18 @@ def synchronisation(graph):
 
 def determinisation(graph):
     print("determinisation")
+    # Automate déterministre résultant
+    graph_det = Parser()
+
+    # Automate non déterministe
     nodes = graph.getNodes()
     currentNode = graph.getInitialState()
     states = graph.getStates()
+
+    # File pour le traitement des noeuds
     states_queue = queue.Queue()
     states_queue.put(currentNode)
+    # Liste des noeuds traités
     node_treated = []
     while (not states_queue.empty()):
         currentNode = states_queue.get()
@@ -107,22 +116,26 @@ def determinisation(graph):
                     new_state = ''
                     for trans in non_det_trans:
                         new_state += trans.mGoto
-                        nodes.remove(trans)
-                        print(graph.nodeToString(trans))
-                    print(new_state)
-                    states.append(new_state)
-                    nodes.append(
+                        goto_nodes = graph.getStateTransitions(node.mGoto)
+                        # Récupérer les succésseurs des états non déterministes
+                        for gtn in goto_nodes:
+                            graph_det.Nodes.append(
+                                Node(new_state, gtn.mValue, gtn.mGoto))
+                    graph_det.states.append(new_state)
+                    graph_det.Nodes.append(
                         Node(currentNode, trans.mValue, new_state))
+
                     states_queue.put(new_state)
                 # Sinon ajout les succésseurs à la liste des états à traiter
                 else:
+                    graph_det.Nodes.append(node)
                     states_queue.put(node.mGoto)
 
                 currentNode = node.mGoto
                 node_treated.append(node)
         for node in nodes:
             print(graph.nodeToString(node))
-    return graph
+    return graph_det
 
 # algorithme calculant un automate déterministe minimal équivalent au premier.
 

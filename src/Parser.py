@@ -7,71 +7,72 @@ class Parser(object):
     alphabet, les états et transitions
     """
 
-    def __init__(self, file):
-        self.__m_file = file
-        self.__m_Nodes = []  # transitions
-        self.__m_finalStates = []  # états finaux
-        self.__m_alphabet = []  # alphabet
-        self.__m_states = []  # états
-        self.__m_initialState = ''  # état initial
+    def __init__(self, file=None):
+        if (file):
+            self.file = file
+        self.Nodes = []  # transitions
+        self.finalStates = []  # états finaux
+        self.alphabet = []  # alphabet
+        self.states = []  # états
+        self.initialState = ''  # état initial
 
     def parse(self):
         counter = 0
-        for line in self.__m_file:
+        for line in self.file:
             # la première ligne contient les états finaux
             if (counter == 0):
                 # les stocker
-                self.__m_finalStates = line.rstrip().split(' ')
+                self.finalStates = line.rstrip().split(' ')
 
             # reste du fichier = transitions
             # Premier élément de la première ligne = état initial
             # A chaque ligne ajouter l'état et élément de l'alphabet s'ils n'existent pas déjà
             elif (counter == 1):
-                self.__m_initialState = line.rstrip().split(' ')[0]
+                self.initialState = line.rstrip().split(' ')[0]
                 line = line.rstrip().split(' ')
 
-                self.__m_states.append(line[0])
+                self.states.append(line[0])
                 if (line[0] != line[2]):
-                    self.__m_states.append(line[2])
+                    self.states.append(line[2])
 
-                self.__m_Nodes.append(Node(line[0], line[1], line[2]))
+                self.Nodes.append(Node(line[0], line[1], line[2]))
 
-                if (line[1] not in self.__m_alphabet):
-                    self.__m_alphabet.append(line[1])
+                if (line[1] not in self.alphabet):
+                    self.alphabet.append(line[1])
             else:
                 line = line.rstrip().split(' ')
-                if (line[0] not in self.__m_states):
-                    self.__m_states.append(line[0])
-                if (line[2] not in self.__m_states):
-                    self.__m_states.append(line[2])
+                if (line[0] not in self.states):
+                    self.states.append(line[0])
+                if (line[2] not in self.states):
+                    self.states.append(line[2])
 
-                self.__m_Nodes.append(Node(line[0], line[1], line[2]))
+                self.Nodes.append(Node(line[0], line[1], line[2]))
 
-                if (line[1] not in self.__m_alphabet):
-                    self.__m_alphabet.append(line[1])
+                if (line[1] not in self.alphabet):
+                    self.alphabet.append(line[1])
 
             counter += 1
         self.close()
 
     def close(self):
         # Fermer le fichier à la fin
-        self.__m_file.close()
+        self.file.close()
 
     # getters
     def getAlphabet(self):
-        return self.__m_alphabet
+        return self.alphabet
 
     def getFinalStates(self):
-        return self.__m_finalStates
+        return self.finalStates
 
     def getNodes(self):
-        return self.__m_Nodes
+        return self.Nodes
 
     def getStates(self):
-        return self.__m_states
+        return self.states
 
     def getInitialState(self):
-        return self.__m_initialState
+        return self.initialState
 
     # Récupérer toutes les transitions possibles d'un noeud (state)
     def getStateTransitions(self, state):
@@ -82,9 +83,21 @@ class Parser(object):
 
         return transFromState
 
-    # setters
-    def setNodes(self, nodes):
-        self.__m_Nodes = nodes
-
     def nodeToString(self, node):
         return f"Read {node.mValue} from {node.mFrom} to {node.mGoto}"
+
+    # setters
+    def setAlphabet(self, alphabet):
+        self.alphabet = alphabet
+
+    def setFinalStates(self, final_states):
+        self.finalStates = final_states
+
+    def setNodes(self, nodes):
+        self.Nodes = nodes
+
+    def setStates(self, states):
+        self.states = states
+
+    def setInitialState(self, initialState):
+        self.initialState = initialState
