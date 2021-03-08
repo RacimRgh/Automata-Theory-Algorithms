@@ -2,11 +2,14 @@ class Algorithms(object):
     def __init__(self, graph):
         self.__m_graph = graph
 
+    # Vérifier si un mot appartient au langage
     def acceptation(self):
         # parse file and store states
         nodes = self.__m_graph.getNodes()
         finalStates = self.__m_graph.getFinalStates()
         alphabet = self.__m_graph.getAlphabet()
+        initialState = self.__m_graph.getInitialState()
+        # print(initialState)
         # get string to check against
         running = True
         while(running):
@@ -15,25 +18,25 @@ class Algorithms(object):
                 running = False
             else:
                 # we always begin at 0
-                testCase = uInput
-                testCase = testCase + testCase[-1]
-                currentNode = 0
+                mot = uInput
+                print(mot)
+                mot = mot + mot[-1]
+                print(mot)
+                currentNode = initialState
                 error = False
                 counter = 0
-                for letter in testCase:
-                 # check if letter is in alphabet
+                for letter in mot:
+                 # Vérifier si la lettre est dans l'alphabet
                     if letter in alphabet:
-                        # test
-                        # print("letter is {0} and node at {1}".format(letter,currentNode));
-                        # end test
-                        # check if letter belongs to current node
+                        # Vérifier si la lettre est dans le noeud courant
                         for node in nodes:
-                            if node.mValue == currentNode and node.mLetter == letter:
-                                print("{} in state {}".format(
-                                    node.mLetter, node.mValue))
-                                # if letter is last letter
-                                if (counter == len(testCase) - 1):
-                                    # and it is in a final state then string is accepted
+                            # print(type(str(node.mFrom)), type(currentNode))
+                            if node.mFrom == currentNode and node.mValue == letter:
+                                print("Read {} from {} to {}".format(
+                                    node.mValue, node.mFrom, node.mGoto))
+                               # Si c'est la dernière lettre du mot
+                                if (counter == len(mot) - 1):
+                                    # Si état final alors mot accepté
                                     if (currentNode in finalStates):
                                         break
                                     else:
@@ -41,10 +44,10 @@ class Algorithms(object):
                                             "Error last letter not in final state")
                                         error = True
                                         break
-                                # advance cursor
+                                # Avencer le noeud
                                 currentNode = node.mGoto
                                 break
-                    # if letter not in language set error flag and quit
+                    # Si mot pas dans le langage
                     else:
                         print("Error letter not in alphabet")
                         error = True

@@ -29,9 +29,15 @@ class Parser(object):
             elif (counter == 1):
                 self.__m_initialState = line.rstrip().split(' ')[0]
                 line = line.rstrip().split(' ')
+
                 self.__m_states.append(line[0])
                 if (line[0] != line[2]):
                     self.__m_states.append(line[2])
+
+                self.__m_Nodes.append(Node(line[0], line[1], line[2]))
+
+                if (line[1] not in self.__m_alphabet):
+                    self.__m_alphabet.append(line[1])
             else:
                 line = line.rstrip().split(' ')
                 if (line[0] not in self.__m_states):

@@ -8,6 +8,8 @@ import os
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
+import codecs
+# import simplejson as sjson
 
 
 def main():
@@ -18,7 +20,8 @@ def main():
     # Parcours récursif de tout les fichiers dans le dossier Files
     # 1 fichier == 1 langage/graphe
     for filename in input_files:
-        with open(os.path.join(os.getcwd(), filename), 'r') as f:  # ouvrir en mode lecture
+        # ouvrir en mode lecture
+        with codecs.open(os.path.join(os.getcwd(), filename), encoding='utf-8') as f:
             print(filename)
             name = filename.name.split('.')[0] + '.json'
             print(name)
@@ -44,7 +47,9 @@ def main():
             nodes = parsedFile.getNodes()
             nodes = [[str(node.mFrom), str(node.mValue), str(node.mGoto)]
                      for node in nodes]
-            print('Transitions:', nodes)
+            for node in nodes:
+                print(node)
+            # print('Transitions:', nodes)
 
             gr = {}
             gr['alphabet'] = alphabet
@@ -57,11 +62,12 @@ def main():
 
             # Créer un fichier json contenant le langage lu
             with open(os.path.join(os.getcwd(), "..\\Results\\"+name), 'w') as outfile:
-                json.dump(gr, outfile)
+                json.dump(gr, outfile, indent=4)
 
             # Exécuter les algorithmes
             # TO DO
-            Algorithms(parsedFile)
+            algos = Algorithms(parsedFile)
+            algos.acceptation()
 
 
 if __name__ == '__main__':
