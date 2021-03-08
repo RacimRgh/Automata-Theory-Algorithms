@@ -1,8 +1,11 @@
+from Node import *
+
+
 class Algorithms(object):
     def __init__(self, graph):
         self.__m_graph = graph
 
-    # Vérifier si un mot appartient au langage
+    # algorithme prenant un automate déterministe et un mot, et décidant si le mot est accepté par l'automate.
     def acceptation(self):
         # parse file and store states
         nodes = self.__m_graph.getNodes()
@@ -17,11 +20,9 @@ class Algorithms(object):
             if (uInput == "quit"):
                 running = False
             else:
-                # we always begin at 0
                 mot = uInput
                 print(mot)
                 mot = mot + mot[-1]
-                print(mot)
                 currentNode = initialState
                 error = False
                 counter = 0
@@ -58,17 +59,34 @@ class Algorithms(object):
                 else:
                     print("String accepted")
 
+    # algorithme calculant un automate équivalent au premier, sans "epsilon-transitions.
     def synchronisation(self):
         print("syncho")
+        nodes = self.__m_graph.getNodes()
+        # alphabet = self.__m_graph.getAlphabet()
+        for node in nodes:
+            if node.mValue == "\u03b5":
+                epsilonTransitions = self.__m_graph.getStateTransitions(
+                    node.mGoto)
+                for epsilonNode in epsilonTransitions:
+                    print(self.__m_graph.nodeToString(epsilonNode))
+                    nodes.append(
+                        Node(node.mFrom, epsilonNode.mValue, epsilonNode.mGoto))
+                    # algorithme calculant un automate déterministe équivalent au premier.
+                nodes.remove(node)
+        return self.__m_graph
 
     def determinisation(self):
         print("det")
 
+    # algorithme calculant un automate déterministe minimal équivalent au premier.
     def minimisation(self):
         print("min")
 
+    # algorithme prenant deux automates, et déterminant si ceux-ci sont équivalents.
     def equivalence(self):
         print("eq")
 
+    # algorithme prenant une expression régulière, et retournant l'automate de Thompson calculant le langage correspondant à cette expression.
     def thompson(self):
         print("thomson")

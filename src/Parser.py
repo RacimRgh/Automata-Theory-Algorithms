@@ -72,3 +72,19 @@ class Parser(object):
 
     def getInitialState(self):
         return self.__m_initialState
+
+    # Récupérer toutes les transitions possibles d'un noeud (state)
+    def getStateTransitions(self, state):
+        transFromState = []
+        for node in self.getNodes():
+            if (node.mFrom == state):
+                transFromState.append(node)
+
+        return transFromState
+
+    # setters
+    def setNodes(self, nodes):
+        self.__m_Nodes = nodes
+
+    def nodeToString(self, node):
+        return f"Read {node.mValue} from {node.mFrom} to {node.mGoto}"
