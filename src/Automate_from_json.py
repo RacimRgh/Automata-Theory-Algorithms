@@ -48,7 +48,7 @@ for filename in input_json_files:
     with open(os.path.join(os.getcwd(), filename), 'r') as f:  # ouvrir en mode lecture
         print(filename)
         extension = filename.name.split('.')  # nom du fichier
-        if extension[1] == 'json':
+        if len(extension) > 1 and extension[1] == 'json':
             name = extension[0]
             print(name)
             automate = Digraph('finite_state_machine', directory=os.path.join(

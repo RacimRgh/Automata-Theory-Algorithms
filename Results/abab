@@ -2,7 +2,7 @@ digraph finite_state_machine {
 	node [shape=doublecircle]
 	4
 	node [shape=circle]
-	0 -> 1 [label="ε"]
+	0 -> 1 [label=a]
 	0 -> 2 [label=b]
 	0 -> 1 [label=b]
 	1 -> 1 [label=a]

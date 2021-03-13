@@ -7,4 +7,4 @@ class Node(object):
         self.mGoto = str(goto)
 
     def __eq__(self, other):
-        return (self.mFrom == other.mFrom) & (self.mValue == other.mValue)
+        return (self.mFrom == other.mFrom) & (self.mValue == other.mValue) & (self.mGoto == other.mGoto)
