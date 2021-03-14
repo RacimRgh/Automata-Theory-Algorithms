@@ -2,6 +2,7 @@ from Parser import *
 from Node import *
 import collections
 import queue
+from itertools import combinations
 
 # algorithme prenant un automate déterministe et un mot, et décidant si le mot est accepté par l'automate.
 
@@ -228,10 +229,61 @@ def determinisation(graph):
 
 def minimisation(graph):
     print("min")
+    final_states = graph.getFinalStates()
+    states = graph.getStates()
+    alphabet = graph.getAlphabet()
+    partitions = [[], []]
+    # Créer la partition initiale P0 = { {état finaux}, {états non finaux} }
+    for state in states:
+        if state in final_states:
+            partitions[0].append(state)
+        else:
+            partitions[1].append(state)
+
+    i = 0
+    while (i < len(partitions)):
+        # Récupérer les pairs des éléments de la partition
+        pairs = list(combinations(partitions[i], 2))
+        for p in pairs:
+            # print(p[0])
+            for x in alphabet:
+                # Récupérer les transitions possibles depuis la paire d'états avec la lettre x
+                t1 = graph.getStateTransitionsLetter(p[0], x)
+                t2 = graph.getStateTransitionsLetter(p[1], x)
+                if (len(t1) == 0 or len(t2) == 0):
+                    distinguishable = False
+                else:
+                    for l in partitions:
+                        if (t1[0].mGoto in l):
+                            l1 = l
+                        if (t2[0].mGoto in l):
+                            l2 = l
+                    # Si les états d'arrivée des 2 noeuds sont dans 2 partitions différentes
+                    # Alors séparer les états dans la liste des partitions
+                    if (l1 != l2):
+                        distinguishable = True
+                        partitions[i].remove(p[1])
+                        partitions.append(list(p[1]))
+                        # Révenir au début de la liste des partitions car changement
+                        i = 1
+                    else:
+                        distinguishable = False
+                        i += 1
+    # Construire le graphe minimal
+    graph_min = Parser()
+    for p in partitions:
+        graph_min.states.append(",".join(p))
+        print(",".join(p))
+
+    # for state in graph_min.states:
+    graph_min.initialState = graph_min.states[0]
+    graph_min.finalStates.append(graph_min.states[1])
+    graph_min.Nodes.append(Node(graph_min.states[0], 'a', graph_min.states[0]))
+    graph_min.Nodes.append(Node(graph_min.states[0], 'b', graph_min.states[1]))
+    return graph_min
+
 
 # algorithme prenant deux automates, et déterminant si ceux-ci sont équivalents.
-
-
 def equivalence(graph):
     print("eq")
 

@@ -2,7 +2,7 @@
 #   Python DFA
 #
 from Parser import Parser
-from Algorithms import acceptation, determinisation, synchronisation
+from Algorithms import acceptation, determinisation, synchronisation, minimisation
 import json
 import os
 from os import listdir
@@ -70,6 +70,10 @@ def main():
             det = determinisation(graph)
             det_json = getgraph(det)
             write_to_json_file("abab-det.json", det_json)
+
+            gmin = minimisation(det)
+            gmin_json = getgraph(gmin)
+            write_to_json_file("abab-min.json", gmin_json)
 
             # acceptation
             # algos.acceptation()

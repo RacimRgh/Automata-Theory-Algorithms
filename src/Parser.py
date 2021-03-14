@@ -83,6 +83,15 @@ class Parser(object):
 
         return transFromState
 
+     # Récupérer toutes les transitions possibles d'un noeud (state) en lisant la lettre (letter)
+    def getStateTransitionsLetter(self, state, letter):
+        transFromState = []
+        for node in self.getNodes():
+            if (node.mFrom == state and node.mValue == letter):
+                transFromState.append(node)
+
+        return transFromState
+
     def nodeToString(self, node):
         return f"Read {node.mValue} from {node.mFrom} to {node.mGoto}"
 
