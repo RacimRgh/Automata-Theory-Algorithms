@@ -75,6 +75,10 @@ def main():
             gmin_json = getgraph(gmin)
             write_to_json_file("abab-min.json", gmin_json)
 
+            # gmin = minimisation(graph)
+            # gmin_json = getgraph(gmin)
+            # write_to_json_file("min.json", gmin_json)
+
             # acceptation
             # algos.acceptation()
 

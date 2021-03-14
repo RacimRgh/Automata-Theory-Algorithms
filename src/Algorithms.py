@@ -244,7 +244,12 @@ def minimisation(graph):
     while (i < len(partitions)):
         # Récupérer les pairs des éléments de la partition
         pairs = list(combinations(partitions[i], 2))
+        print(i, partitions[i])
+        distinguishable = False
         for p in pairs:
+            if distinguishable:
+                break
+            print(p)
             # print(p[0])
             for x in alphabet:
                 # Récupérer les transitions possibles depuis la paire d'états avec la lettre x
@@ -258,6 +263,10 @@ def minimisation(graph):
                             l1 = l
                         if (t2[0].mGoto in l):
                             l2 = l
+
+                    print(l1)
+                    print(l2)
+                    print("__________")
                     # Si les états d'arrivée des 2 noeuds sont dans 2 partitions différentes
                     # Alors séparer les états dans la liste des partitions
                     if (l1 != l2):
@@ -265,21 +274,34 @@ def minimisation(graph):
                         partitions[i].remove(p[1])
                         partitions.append(list(p[1]))
                         # Révenir au début de la liste des partitions car changement
-                        i = 1
+                        i = 0
+                        break
                     else:
                         distinguishable = False
-                        i += 1
+
+        i = i + 1
     # Construire le graphe minimal
     graph_min = Parser()
     for p in partitions:
-        graph_min.states.append(",".join(p))
-        print(",".join(p))
+        ns = ",".join(p)
+        graph_min.states.append(ns)
+        for fs in graph.finalStates:
+            if fs in p and ns not in graph_min.finalStates:
+                graph_min.finalStates.append(ns)
+        # print(",".join(p))
 
     # for state in graph_min.states:
+    for node in graph.Nodes:
+        for p in partitions:
+            if node.mFrom in p:
+                i = partitions.index(p)
+            if node.mGoto in p:
+                j = partitions.index(p)
+        new_node = Node(graph_min.states[i],
+                        node.mValue, graph_min.states[j])
+        if (new_node not in graph_min.Nodes):
+            graph_min.Nodes.append(new_node)
     graph_min.initialState = graph_min.states[0]
-    graph_min.finalStates.append(graph_min.states[1])
-    graph_min.Nodes.append(Node(graph_min.states[0], 'a', graph_min.states[0]))
-    graph_min.Nodes.append(Node(graph_min.states[0], 'b', graph_min.states[1]))
     return graph_min
 
 
