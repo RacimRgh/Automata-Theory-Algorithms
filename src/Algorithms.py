@@ -4,9 +4,8 @@ import collections
 import queue
 from itertools import combinations
 
+
 # algorithme prenant un automate déterministe et un mot, et décidant si le mot est accepté par l'automate.
-
-
 def acceptation(graph):
     # parse file and store states
     nodes = graph.getNodes()
@@ -60,9 +59,8 @@ def acceptation(graph):
             else:
                 print("String accepted")
 
+
 # algorithme calculant un automate équivalent au premier, sans "epsilon-transitions".
-
-
 def synchronisation(graph):
     print("syncho")
     nodes = graph.getNodes()
@@ -117,6 +115,7 @@ def determinisation(graph):
 
     # Noeuds traités
     state_done = []
+
     # File des noeuds non traités
     while (not states_queue.empty()):
         currentNode = states_queue.get()
@@ -176,6 +175,7 @@ def determinisation(graph):
                         # Trier par ordre alphabétique le nouvel état
                         # print(sorted(new_state))
                         new_state = "".join(sorted(new_state))
+
                         # ajouter le nouvel état
                         # if not containsAll(graph.states, new_state):
                         if new_state not in graph.states:
@@ -224,9 +224,8 @@ def determinisation(graph):
                 break
     return graph
 
+
 # algorithme calculant un automate déterministe minimal équivalent au premier.
-
-
 def minimisation(graph):
     print("min")
     final_states = graph.getFinalStates()

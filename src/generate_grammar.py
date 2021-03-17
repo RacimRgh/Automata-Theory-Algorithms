@@ -1,6 +1,6 @@
-import ntlk
+import nltk
 import string
-from ntlk.parse.generate import generate
+from nltk.parse.generate import generate
 import sys
 
 productions = [
@@ -11,6 +11,7 @@ productions = [
 ]
 
 digits = list(string.digits)
+print(digits)
 for digit in digits[:4]:
     productions.append("NUMBER -> '{w}'".format(w=digit))
 
@@ -19,7 +20,7 @@ productions.append("LETTER -> '{w}'".format(w=letters))
 
 grammatString = "\n".join(productions)
 
-grammar = ntlk.CFG.fromstring(grammatString)
+grammar = nltk.CFG.fromstring(grammatString)
 
 print(grammar)
 
