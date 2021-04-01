@@ -78,18 +78,18 @@ def synchronisation(graph):
     return graph
 
 
-# Vérifier si l'état existe déjà
-# Cas particuliers à traiter:
-#                   -0124 et 4201 sont le même état
-#                   -124 et 0124 ne sont pas le même
-def containsAll(states, new_st):
-    for st in states:
-        if len(st) != len(new_st):
-            continue
-        else:
-            if 0 not in [c in st for c in new_st]:
-                return 1
-    return 0
+# # Vérifier si l'état existe déjà
+# # Cas particuliers à traiter:
+# #                   -0124 et 4201 sont le même état
+# #                   -124 et 0124 ne sont pas le même
+# def containsAll(states, new_st):
+#     for st in states:
+#         if len(st) != len(new_st):
+#             continue
+#         else:
+#             if 0 not in [c in st for c in new_st]:
+#                 return 1
+#     return 0
 
 
 def ajout_trans(noeud, graph):
@@ -255,23 +255,29 @@ def minimisation(graph):
                 t1 = graph.getStateTransitionsLetter(p[0], x)
                 t2 = graph.getStateTransitionsLetter(p[1], x)
                 if (len(t1) == 0 or len(t2) == 0):
-                    distinguishable = False
+                    # distinguishable = False
+                    if p[1] in partitions[i]:
+                        partitions[i].remove(p[1])
+                        partitions.append(list(p[1]))
                 else:
+                    l1 = []
+                    l2 = []
                     for l in partitions:
                         if (t1[0].mGoto in l):
                             l1 = l
                         if (t2[0].mGoto in l):
                             l2 = l
 
-                    print(l1)
-                    print(l2)
-                    print("__________")
+                    # print(l1)
+                    # print(l2)
+                    # print("__________")
                     # Si les états d'arrivée des 2 noeuds sont dans 2 partitions différentes
                     # Alors séparer les états dans la liste des partitions
-                    if (l1 != l2):
+                    if (l1 and l2 and l1 != l2):
                         distinguishable = True
-                        partitions[i].remove(p[1])
-                        partitions.append(list(p[1]))
+                        if p[1] in partitions[i]:
+                            partitions[i].remove(p[1])
+                            partitions.append(list(p[1]))
                         # Révenir au début de la liste des partitions car changement
                         i = 0
                         break
