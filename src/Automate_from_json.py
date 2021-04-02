@@ -34,5 +34,3 @@ def generate_automate():
                 for state in graph['transitions']:
                     automate.edge(state[0], state[2], label=state[1])
                 automate.view()
-
-    # f.attr(rankdir='LR', size='8,5')

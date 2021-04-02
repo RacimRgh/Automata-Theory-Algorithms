@@ -1,102 +1,75 @@
-# by Aryak Sen
-import operator
+##################
 
+def prefix_regex(exp):
+    prio = {
+        ')': 0,
+        '(': 0,
+        '*': 3,
+        '.': 1,
+        '+': 1,
+        '?': 1
+    }
+    operators = ['*', '.', '+']
+    # op_stack = deque()
+    # out_stack = deque()
+    op_stack = []
+    out_stack = []
+    print("thomson")
+    for c in exp:
+        # Si le caractère lu n'est ni opérateur ni ( )
+        # L'ajoute à la pile de sortie
+        if c not in prio.keys():
+            # print('1-', c)
+            out_stack.append(c)
 
-class Node:
-    def __init__(self, value):
-        self.left = None
-        self.data = value
-        self.right = None
-
-    def postorder(self):
-
-        if self.left:
-            self.left.postorder()
-        if self.right:
-            self.right.postorder()
-        print(self.data, end=" ")
-
-
-def is_greater_precedence(op1, op2):
-    pre = {'+': 0, '-': 0, '*': 1, '/': 1, '^': 2}
-    return pre[op1] >= pre[op2]
-
-
-def associativity(op):
-    ass = {'+': 0, '-': 0, '*': 0, '/': 0, '^': 1}
-    return ass[op]
-
-
-def build_tree(exp):
-    exp_list = exp.split()
-    print(exp_list)
-    stack = []
-    tree_stack = []
-    for i in exp_list:
-        if i not in ['+', '-', '*', '/', '^', '(', ')']:
-            t = Node(int(i))
-            tree_stack.append(t)
-
-        elif i in ['+', '-', '*', '/', '^']:
-            if not stack or stack[-1] == '(':
-                stack.append(i)
-
-            elif is_greater_precedence(i, stack[-1]) and associativity(i) == 1:
-                stack.append(i)
-
+        # Si le caractère est un opérateur
+        elif c in operators:
+            # print('2-', c)
+            # 1 - Si le sommet est un opérateur avec une + grande priorité
+            if len(op_stack) > 0:
+                top = op_stack.pop()
+                while top in operators and prio[top] >= prio[c]:
+                    out_stack.append(top)
+                    # Parcours la pile tant que le sommet est un opérateur
+                    # et est plus prioritaire que la caractère lu
+                    # while (len(op_stack) > 0):
+                    if (len(op_stack) == 0):
+                        break
+                    top = op_stack.pop()
+                    if (top in operators and prio[top] < prio[c]) or top not in operators:
+                        break
+                    # out_stack.append(top)
+                # Si le caractère lu est un opérateur, et le sommet de pile est une '('
+                if top in operators and prio[top] < prio[c]:
+                    op_stack.append(top)
+                    op_stack.append(c)
+                if top == '(':
+                    op_stack.append(top)
+                    op_stack.append(c)
+                if (len(op_stack) == 0):
+                    op_stack.append(c)
             else:
-                while stack and is_greater_precedence(stack[-1], i) and associativity(i) == 0:
-                    popped_item = stack.pop()
-                    t = Node(popped_item)
-                    t1 = tree_stack.pop()
-                    t2 = tree_stack.pop()
-                    t.right = t1
-                    t.left = t2
-                    tree_stack.append(t)
-                stack.append(i)
+                op_stack.append(c)
 
-        elif i == '(':
-            stack.append('(')
+        # Si le caractère lu est une '('
+        elif c == '(':
+            # print('3-', c)
+            op_stack.append(c)
 
-        elif i == ')':
-            while stack[-1] != '(':
-                popped_item = stack.pop()
-                t = Node(popped_item)
-                t1 = tree_stack.pop()
-                t2 = tree_stack.pop()
-                t.right = t1
-                t.left = t2
-                tree_stack.append(t)
-            stack.pop()
-    while stack:
-        popped_item = stack.pop()
-        t = Node(popped_item)
-        t1 = tree_stack.pop()
-        t2 = tree_stack.pop()
-        t.right = t1
-        t.left = t2
-        tree_stack.append(t)
-
-    t = tree_stack.pop()
-
-    return t
-
-
-def evaluate(expTree):
-    opers = {'+': operator.add, '-': operator.sub,
-             '*': operator.mul, '/': operator.truediv, '^': operator.pow}
-
-    leftC = expTree.left
-    rightC = expTree.right
-
-    if leftC and rightC:
-        fn = opers[expTree.data]
-        return fn(evaluate(leftC), evaluate(rightC))
-    else:
-        return expTree.data
-
-
-# t = build_tree("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3")
-t = build_tree("1 + ( 1 + 2 ) * 2")
-print(evaluate(t))
-t.postorder()
+        # Si le caractère lu == ')': dépiler tout les opérateurs jusqu'à arriver à '('
+        elif c == ')':
+            # print('4-', c)
+            if (len(op_stack) > 0):
+                top = op_stack.pop()
+                if top in operators:
+                    out_stack.append(top)
+                    while (len(op_stack) > 0):
+                        top = op_stack.pop()
+                        if top == '(':
+                            break
+                        out_stack.append(top)
+                else:
+                    print('Mauvaise expression.')
+    for op in op_stack:
+        out_stack.append(op)
+    return out_stack

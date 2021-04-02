@@ -1,13 +1,19 @@
 digraph finite_state_machine {
 	node [shape=egg]
-	4
+	0
 	node [shape=doublecircle]
-	5
+	11
 	node [shape=circle]
-	2 -> 3 [label=b]
 	0 -> 1 [label=a]
-	4 -> 2 [label="ε"]
-	4 -> 0 [label="ε"]
-	3 -> 5 [label="ε"]
-	1 -> 5 [label="ε"]
+	4 -> 5 [label=b]
+	2 -> 3 [label=a]
+	6 -> 4 [label="ε"]
+	6 -> 2 [label="ε"]
+	5 -> 7 [label="ε"]
+	3 -> 7 [label="ε"]
+	7 -> 6 [label="ε"]
+	1 -> 6 [label="ε"]
+	7 -> 9 [label="ε"]
+	1 -> 9 [label="ε"]
+	9 -> 11 [label=b]
 }
