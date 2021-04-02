@@ -3,10 +3,13 @@ from itertools import combinations
 from Node import Node
 from Parser import Parser
 
-# algorithme calculant un automate déterministe minimal équivalent au premier.
-
 
 def minimisation(graph):
+    """Fonction de minimisation d'un automate
+
+    Algorithme calculant un automate déterministe minimal équivalent au premier.
+
+    """
     print("min")
     final_states = graph.getFinalStates()
     states = graph.getStates()

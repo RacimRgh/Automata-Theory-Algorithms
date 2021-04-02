@@ -1,8 +1,11 @@
 from Node import Node
 from Parser import Parser
 
-# algorithme prenant deux automates, et déterminant si ceux-ci sont équivalents.
 
+def equivalence(graph1, graph2):
+    """ Fonction de vérification de l'équivalence de deux automates
 
-def equivalence(graph):
+    algorithme prenant deux automates, et déterminant si ceux-ci sont équivalents.
+
+    """
     print("eq")

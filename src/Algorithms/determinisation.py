@@ -8,10 +8,13 @@ def ajout_trans(noeud, graph):
         graph.Nodes.append(noeud)
     return graph.Nodes
 
-# algorithme calculant un automate déterministe équivalent au premier.
-
 
 def determinisation(graph):
+    """Fonction de déterminisation d'un automate
+
+    Algorithme calculant un automate déterministe équivalent au premier.
+
+    """
     print("determinisation")
 
     # Automate non déterministe

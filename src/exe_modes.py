@@ -1,3 +1,9 @@
+"""Module contenant les modes d'exécution du projet
+
+Ce module contient les fonctions qui seront exécutés selon le choix
+de l'utilisateur.
+
+"""
 import json
 import os
 from os.path import isfile, join
@@ -15,7 +21,7 @@ from Algorithms.minimisation import minimisation
 from Algorithms.thompson import thompson
 
 from Automate_from_json import generate_automate
-from Random_lang import generate_lang, isolated_node
+from Random_lang import generate_lang, valid_node
 from graph_to_json import getgraph, write_to_json_file
 
 global files_path
@@ -23,6 +29,19 @@ files_path = Path('..\\Files\\')
 
 
 def read_files():
+    """Traitement des fichiers du dossier 'Files'
+
+    Cette fonction parcours tout les fichiers ayant l'extension
+    '.txt', et une syntaxe correcte sous le format décrit ci-dessous
+    pour les transformer en fichier JSON puis en automate avec graphviz
+
+    Example:
+        * La premier ligne contient les états finaux séparés par des espaces
+        1 2 3
+        * Le reste du fichier contient les transitions sous le format:
+        <état de départ> <caractère à lire> <état d'arrivé>
+
+    """
     input_files = (
         entry for entry in files_path.iterdir() if entry.is_file())
     # Parcours récursif de tout les fichiers dans le dossier Files
@@ -63,6 +82,15 @@ def read_files():
 
 
 def gen_auto(n):
+    """Fonction de génération automatique d'automates
+
+    La fonction génère des automates aléatoires en utilisant le module
+    'Random_lang', et les stocke dans un fichier txt
+
+    Args:
+        n (int): Nombre d'automates à générer
+
+    """
     i = 1
     while i < n+1:
         filename = "Ex1-" + str(i)
@@ -78,6 +106,12 @@ def gen_auto(n):
 
 
 def gen_thompson(exp):
+    """Fonction de création d'automate depuis une expression régulière
+
+    Args:
+        exp (str): Expression régulière à transformer
+
+    """
     gt = thompson(exp)
     gt_json = getgraph(gt)
     write_to_json_file("Thompson.json", gt_json)

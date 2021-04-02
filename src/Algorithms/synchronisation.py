@@ -1,10 +1,13 @@
 from Node import Node
 from Parser import Parser
 
-# algorithme calculant un automate équivalent au premier, sans "epsilon-transitions".
-
 
 def synchronisation(graph):
+    """Algorithme de suppresion des epsilon transitions
+
+    Algorithme calculant un automate équivalent au premier, sans "epsilon-transitions".
+
+    """
     print("syncho")
     nodes = graph.getNodes()
     # alphabet = graph.getAlphabet()

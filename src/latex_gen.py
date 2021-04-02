@@ -1,4 +1,6 @@
-
+"""Module pour la génération de sujet d'examens de THL avec Latex
+Todo:
+"""
 from pylatex import *
 from pylatex.utils import bold
 import os

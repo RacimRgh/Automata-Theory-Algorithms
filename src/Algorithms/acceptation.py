@@ -1,10 +1,21 @@
 from Node import Node
 from Parser import Parser
 
-# algorithme prenant un automate déterministe et une liste de mots, et décidant si le mot est accepté par l'automate.
-
 
 def acceptation(graph, words):
+    """Fonction de vérification d'acceptation de mots par un automate
+
+    Algorithme prenant un automate déterministe et un mot, et décidant si
+    le mot est accepté par l'automate.
+
+    Args:
+        graph (Parser): Un automate sous forme d'objet de la classe Parser
+        words (list): Liste de mots à vérifier
+
+    Returns:
+        dic: Dictionnaire ayant pour clés les mots donnés en paramètre, et
+        comme valeur un booléen selon si il est accepté ou non.
+    """
     nodes = graph.getNodes()
     finalStates = graph.getFinalStates()
     alphabet = graph.getAlphabet()

@@ -9,8 +9,12 @@ def gen_state(states):
             return str(i)
 
 
-# algorithme prenant une expression régulière, et retournant l'automate de Thompson calculant le langage correspondant à cette expression.
 def thompson(exp):
+    """Fonction de transformation d'une expression postfixé en automate
+
+    Algorithme prenant une expression régulière, et retournant l'automate de Thompson calculant le langage correspondant à cette expression.
+
+    """
     out_stack = prefix_regex(exp)
     print(out_stack)
     graph_stack = []

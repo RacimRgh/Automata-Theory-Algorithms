@@ -1,38 +1,58 @@
+"""Module pour transformer un graphe en dictionnaire et fichier json
+    
+"""
 from Parser import *
 import os
 import json
 
 
 def getgraph(graph):
+    """Fonction qui transforme un objet graphe en dictionnaire python.
+
+    Cette fonction prend un graphe en paramètre et le transforme en
+    dictionnaire suivant la syntaxe des fichiers JSON de la librairie graphviz.
+
+    Args:
+        graph (Parser): Un objet graphe de la classe Parser.
+
+    Returns:
+        dict: Un dictionnaire représentant le graphe.
+    """
     initial_state = graph.getInitialState()
-    # print('Etat initial: ', initial_state)
 
     final_states = graph.getFinalStates()
-    # print('Etats finaux: ', final_states)
 
     alphabet = graph.getAlphabet()
-    # print('Alphabet: ', alphabet)
 
     states = graph.getStates()
-    # print('Etats: ', states)
     # Récupérer les transitions
     # [ ["from", "value", "to"], .... ["from","value", "to"] ]
     nodes = graph.getNodes()
     nodes = [[str(node.mFrom), str(node.mValue), str(node.mGoto)]
              for node in nodes]
-    # for node in nodes:
-    # print(node)
-    # print('Transitions:', nodes)
 
-    gr = {'alphabet': alphabet, 'states': states, 'initial_state': initial_state, 'accepting_states': final_states,
-          'transitions': nodes}
-    # print(
-    #     '_____________________________________________\n___________________________________')
+    gr =
+    {
+        'alphabet': alphabet,
+        'states': states,
+        'initial_state': initial_state,
+        'accepting_states': final_states,
+        'transitions': nodes
+    }
+
     return gr
 
 
 def write_to_json_file(name, json_graph):
-    # Créer un fichier json contenant le langage lu
+    """ Créer un fichier json contenant un langage
+
+    Fonction qui crée un fichier JSON dans le dossier 'Results'
+    contenant un graphe sous la syntaxe JSON de graphviz
+
+    Args:
+        name (str): Nom du fichier JSON à enregistrer
+        json_graph (dict): Dictionnaire qui décrit un graphe.
+    """
     with open(os.path.join(os.getcwd(), "..\\Results\\" + name), 'w') as outfile:
         json.dump(json_graph, outfile, indent=2)
         outfile.close()

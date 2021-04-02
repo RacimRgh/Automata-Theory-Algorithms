@@ -1,6 +1,15 @@
-#
-#   Python DFA
-#
+"""Point d'entré du programme
+
+Ce point d'entré permet d'exécuter le projet selon un des modes d'execution possibles
+
+Example: 
+    $ python ./index -g <n> 
+    $ python ./index -f
+    python ./index -t <exp>
+
+Todo:
+    * Ajouter d'autres modes d'execution
+"""
 import sys
 from exe_modes import read_files, gen_auto, gen_thompson
 
@@ -8,9 +17,9 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         print('\nVeuillez choisir le mode d\'execution:\n')
         print(
-            '\npython ./MainEntry -g <n>  \nn = nombre de langages à générer (Par défaut 3)\n')
-        print('\npython ./MainEntry -f \nPour utiliser les fichiers de /Files/\n')
-        print('\npython ./MainEntry -t <exp> \n Pour générer un automate avec l\'expression régulière <exp>\n')
+            '\npython ./index -g <n>  \nn = nombre de langages à générer (Par défaut 3)\n')
+        print('\npython ./index -f \nPour utiliser les fichiers de /Files/\n')
+        print('\npython ./index -t <exp> \n Pour générer un automate avec l\'expression régulière <exp>\n')
     else:
         if sys.argv[1] == '-g':
             if len(sys.argv) < 3:

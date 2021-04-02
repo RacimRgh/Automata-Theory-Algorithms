@@ -1,6 +1,13 @@
+"""Module de génération automatique d'automates
+
+Todo:
+    * Ajouter des cas de noeuds non valides
+
+"""
+
+
 from Node import *
 from Parser import *
-# from MainEntry import getgraph, write_to_json_file
 import random
 from random import seed
 from random import choice
@@ -8,9 +15,25 @@ from string import ascii_lowercase
 import os
 
 
-def isolated_node(g):
-    # destinations = [node.mGoto for node in g.Nodes]
-    # sources = [node.mFrom for node in g.Nodes]
+def valid_node(g):
+    """Fonction de vérification de noeuds générés
+
+    La fonction vérifie si le graphe généré contient des noeuds 'inutiles'
+    qui le rendent non pertinent
+
+    Example:
+        * Etat isolé
+        * Etat initial sans transition sortante
+        * Etat final sans transition entrante
+        * Etat puit 
+
+    Args:
+        g (Parser): Un graphe généré automatiquement
+
+    Returns:
+        boolean: true si graphe pertinent, false sinon
+
+    """
     for state in g.states:
         sources = []
         destinations = []
@@ -59,6 +82,18 @@ def isolated_node(g):
 
 
 def generate_lang():
+    """Fonction de génération automatique d'automates
+
+    En utilisant la librarie random, générer des états et alphabets
+    pour ensuite créer toutes les combinaisons de transitions 
+    possibles. A la fin on réduit le nombre de transitions à un 
+    nombre réaliste, et on vérifie si le graphe est pertinent avec
+    la fonction précédente
+
+    Returns:
+        graphe: Graphe de la classe Parser
+
+    """
     repeat = False
     while repeat == False:
 
@@ -91,7 +126,7 @@ def generate_lang():
             select_del = choice(graph.Nodes)
             graph.Nodes.remove(select_del)
 
-        repeat = isolated_node(graph)
+        repeat = valid_node(graph)
     # for tr in graph.Nodes:
     #     print(graph.nodeToString(tr))
     # print(len(graph.Nodes))

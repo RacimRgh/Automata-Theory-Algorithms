@@ -1,6 +1,30 @@
-##################
+"""Module de traitement d'expression régulières
+
+Ce module sert principalement à transformer une expression régulière
+en sa forme postfixé
+
+"""
+
 
 def prefix_regex(exp):
+    """Fonction de transformation d'une regex en sa forme postfixé
+
+    La fonction prend en paramètre une expression régulière et la transformer
+    en forme postfixé suivant l'algorithme 'shunting-yard'
+    https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+
+    Le paramètre exp doit absolument expliciter les formes de 
+    concaténation avec '.'
+    Example:
+        a.(a+b)*.b
+
+    Args:
+        exp (str): Expression régulière
+
+    Returns:
+        list: Une liste contenant la forme postfixé de l'expression
+
+    """
     prio = {
         ')': 0,
         '(': 0,
