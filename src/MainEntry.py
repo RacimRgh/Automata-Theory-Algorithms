@@ -2,50 +2,16 @@
 #   Python DFA
 #
 from Parser import Parser
-from Algorithms import acceptation, determinisation, synchronisation, minimisation
+from Algorithms import acceptation, determinisation, synchronisation, minimisation, thompson
 from Automate_from_json import generate_automate
 from Random_lang import generate_lang, isolated_node
+from graph_to_json import getgraph, write_to_json_file
 import json
 import os
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
 import codecs
-
-
-def getgraph(graph):
-    initial_state = graph.getInitialState()
-    # print('Etat initial: ', initial_state)
-
-    final_states = graph.getFinalStates()
-    # print('Etats finaux: ', final_states)
-
-    alphabet = graph.getAlphabet()
-    # print('Alphabet: ', alphabet)
-
-    states = graph.getStates()
-    # print('Etats: ', states)
-    # Récupérer les transitions
-    # [ ["from", "value", "to"], .... ["from","value", "to"] ]
-    nodes = graph.getNodes()
-    nodes = [[str(node.mFrom), str(node.mValue), str(node.mGoto)]
-             for node in nodes]
-    # for node in nodes:
-    # print(node)
-    # print('Transitions:', nodes)
-
-    gr = {'alphabet': alphabet, 'states': states, 'initial_state': initial_state, 'accepting_states': final_states,
-          'transitions': nodes}
-    print(
-        '_____________________________________________\n___________________________________')
-    return gr
-
-
-def write_to_json_file(name, json_graph):
-    # Créer un fichier json contenant le langage lu
-    with open(os.path.join(os.getcwd(), "..\\Results\\" + name), 'w') as outfile:
-        json.dump(json_graph, outfile, indent=2)
-        outfile.close()
 
 
 def main():
@@ -109,8 +75,12 @@ def main():
             # eps = algos.synchronisation()
             # eps_json = getgraph(eps)
             # write_to_json_file("abab-sans-epsilon.json", eps_json)
-    generate_automate()
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    # gt = thompson('a.(a+b)*.b')
+    gt = thompson('a+b')
+    gt_json = getgraph(gt)
+    write_to_json_file("Thompson.json", gt_json)
+    generate_automate()

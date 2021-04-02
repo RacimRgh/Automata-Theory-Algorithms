@@ -1,5 +1,7 @@
 from Parser import *
 from Node import *
+from graph_to_json import getgraph, write_to_json_file
+from collections import deque
 import collections
 import queue
 from itertools import combinations
@@ -317,5 +319,201 @@ def equivalence(graph):
 # algorithme prenant une expression régulière, et retournant l'automate de Thompson calculant le langage correspondant à cette expression.
 
 
-def thompson(graph):
+def gen_state(states):
+    for i in range(100):
+        if str(i) not in states:
+            return str(i)
+
+
+def prefix_regex(exp):
+    prio = {
+        ')': 0,
+        '(': 0,
+        '*': 3,
+        '.': 1,
+        '+': 1,
+        '?': 1
+    }
+    operators = ['*', '.', '+']
+    # op_stack = deque()
+    # out_stack = deque()
+    op_stack = []
+    out_stack = []
     print("thomson")
+    for c in exp:
+        # Si le caractère lu n'est ni opérateur ni ( )
+        # L'ajoute à la pile de sortie
+        if c not in prio.keys():
+            # print('1-', c)
+            out_stack.append(c)
+
+        # Si le caractère est un opérateur
+        elif c in operators:
+            # print('2-', c)
+            # 1 - Si le sommet est un opérateur avec une + grande priorité
+            if len(op_stack) > 0:
+                top = op_stack.pop()
+                while top in operators and prio[top] >= prio[c]:
+                    out_stack.append(top)
+                    # Parcours la pile tant que le sommet est un opérateur
+                    # et est plus prioritaire que la caractère lu
+                    # while (len(op_stack) > 0):
+                    if (len(op_stack) == 0):
+                        break
+                    top = op_stack.pop()
+                    if (top in operators and prio[top] < prio[c]) or top not in operators:
+                        break
+                    # out_stack.append(top)
+                # Si le caractère lu est un opérateur, et le sommet de pile est une '('
+                if top in operators and prio[top] < prio[c]:
+                    op_stack.append(top)
+                    op_stack.append(c)
+                if top == '(':
+                    op_stack.append(top)
+                    op_stack.append(c)
+                if (len(op_stack) == 0):
+                    op_stack.append(c)
+            else:
+                op_stack.append(c)
+
+        # Si le caractère lu est une '('
+        elif c == '(':
+            # print('3-', c)
+            op_stack.append(c)
+
+        # Si le caractère lu == ')': dépiler tout les opérateurs jusqu'à arriver à '('
+        elif c == ')':
+            # print('4-', c)
+            if (len(op_stack) > 0):
+                top = op_stack.pop()
+                if top in operators:
+                    out_stack.append(top)
+                    while (len(op_stack) > 0):
+                        top = op_stack.pop()
+                        if top == '(':
+                            break
+                        out_stack.append(top)
+                else:
+                    print('Mauvaise expression.')
+    for op in op_stack:
+        out_stack.append(op)
+    return out_stack
+
+
+def thompson(exp):
+    out_stack = prefix_regex(exp)
+    print(out_stack)
+    graph_stack = []
+    thompson_graph = Parser()
+    operators = ['*', '.', '+']
+    states = []
+    for c in out_stack:
+        # Si c'est un caractère
+        # Créer un graphe avec un etat initial et etat final, et transition en lisant c
+        if c not in operators:
+            print("1-", c)
+            g = Parser()
+            print(len(graph_stack))
+
+            g.alphabet.append(c)  # ajouter la lettre à l'alphabet
+
+            i = gen_state(states)  # générer l'état initial
+            states.append(i)
+            g.initialState = i
+            g.states.append(i)
+
+            j = gen_state(states)  # générer l'état final
+            states.append(j)
+            g.finalStates.append(j)
+            g.states.append(j)
+
+            # ajouter la transition (initial, c, final)
+            g.Nodes.append(Node(i, c, j))
+            # ajouter le graphe à la pile
+            graph_stack.append(g)
+        # Si
+        elif c == '*':
+            print("2-", c)
+            g = Parser()
+            g = graph_stack.pop()  # récupérer le dernier graphe dans la pile
+            print(len(graph_stack))
+
+            g.Nodes.append(Node(g.finalStates[0], '\u03b5', g.initialState))
+
+            i = gen_state(states)  # générer l'état initial
+            g.states.append(i)
+            states.append(i)
+            g.Nodes.append(Node(i, '\u03b5', g.initialState))
+            g.initialState = i
+
+            j = gen_state(states)  # générer l'état final
+            g.states.append(j)
+            states.append(j)
+            g.Nodes.append(Node(g.finalStates[0], '\u03b5', j))
+            g.finalStates = []
+            g.finalStates.append(j)
+            g.Nodes.append(Node(g.initialState, '\u03b5', g.finalStates[0]))
+
+            graph_stack.append(g)
+        # Si
+        elif c == '+':
+            print("3-", c)
+            print(len(graph_stack))
+            g1 = graph_stack.pop()
+            g2 = graph_stack.pop()
+            g = Parser()
+
+            g.states = list(set().union(g1.states, g2.states))
+            # g.states = [state for state in g1.states if state not in g.states]
+            # g.states = [state for state in g2.states if state not in g.states]
+            g.alphabet = list(set().union(g1.alphabet, g2.alphabet))
+            # g.alphabet = [c for c in g1.alphabet if c not in g.alphabet]
+            # g.alphabet = [c for c in g2.alphabet if c not in g.alphabet]
+            for node in g1.Nodes:
+                g.Nodes.append(node)
+            for node in g2.Nodes:
+                g.Nodes.append(node)
+
+            i = gen_state(states)  # générer l'état initial
+            g.states.append(i)
+            states.append(i)
+            g.Nodes.append(Node(i, '\u03b5', g1.initialState))
+            g.Nodes.append(Node(i, '\u03b5', g2.initialState))
+            g.initialState = i
+
+            j = gen_state(states)  # générer l'état final
+            g.states.append(j)
+            states.append(j)
+            g.Nodes.append(Node(g1.finalStates[0], '\u03b5', j))
+            g.Nodes.append(Node(g2.finalStates[0], '\u03b5', j))
+            g.finalStates = []
+            g.finalStates.append(j)
+
+            graph_stack.append(g)
+        # si
+        elif c == '.':
+            print("4-", c)
+            print(len(graph_stack))
+            g1 = graph_stack.pop()
+            g2 = graph_stack.pop()
+            g = Parser()
+
+            g.Nodes = [node for node in g2.Nodes]
+            g.alphabet = list(set().union(g1.alphabet, g2.alphabet))
+            g.states = [
+                state for state in g1.states if state not in g.states and state != g1.initialState]
+            g.states = list(set().union(g.states, g2.states))
+
+            g.initialState = g2.initialState
+            g.finalStates.append(g1.finalStates[0])
+
+            for node in g1.Nodes:
+                if node.mFrom != g1.initialState:
+                    g.Nodes.append(node)
+                else:
+                    g.Nodes.append(
+                        Node(g2.finalStates[0], node.mValue, node.mGoto))
+            graph_stack.append(g)
+
+    thompson_graph = graph_stack.pop()
+    return thompson_graph
