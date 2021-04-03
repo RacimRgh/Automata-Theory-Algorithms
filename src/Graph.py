@@ -1,7 +1,7 @@
-from Node import *
+from src.Node import *
 
 
-class Parser(object):
+class Graph(object):
     """Clase d'un graphe/automate
 
     Traite un fichier.txt et retourne l'alphabet, l'état initial, états finaux,
@@ -38,11 +38,11 @@ class Parser(object):
         """Fonction de traitement d'un fichier txt
 
         La fonction lis le fichier txt contenant le graphe
-        et génère un objet de type Parser, donc un automate.
+        et génère un objet de type Graph, donc un automate.
 
         """
         counter = 0
-        if file != None:
+        if self.file != None:
             for line in self.file:
                 # la première ligne contient les états finaux
                 if (counter == 0):

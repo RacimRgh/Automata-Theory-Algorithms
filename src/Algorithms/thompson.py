@@ -1,6 +1,6 @@
-from shunting_yard import prefix_regex
-from Parser import Parser
-from Node import Node
+from src.shunting_yard import prefix_regex
+from src.Graph import Graph
+from src.Node import Node
 
 
 def gen_state(states):
@@ -18,7 +18,7 @@ def thompson(exp):
     out_stack = prefix_regex(exp)
     print(out_stack)
     graph_stack = []
-    thompson_graph = Parser()
+    thompson_graph = Graph()
     operators = ['*', '.', '+']
     states = []
     for c in out_stack:
@@ -26,7 +26,7 @@ def thompson(exp):
         # Créer un graphe avec un etat initial et etat final, et transition en lisant c
         if c not in operators:
             print("1-", c)
-            g = Parser()
+            g = Graph()
             print(len(graph_stack))
 
             g.alphabet.append(c)  # ajouter la lettre à l'alphabet
@@ -48,7 +48,7 @@ def thompson(exp):
         # Si
         elif c == '*':
             print("2-", c)
-            g = Parser()
+            g = Graph()
             g = graph_stack.pop()  # récupérer le dernier graphe dans la pile
             print(len(graph_stack))
 
@@ -75,7 +75,7 @@ def thompson(exp):
             print(len(graph_stack))
             g1 = graph_stack.pop()
             g2 = graph_stack.pop()
-            g = Parser()
+            g = Graph()
 
             g.states = list(set().union(g1.states, g2.states))
             # g.states = [state for state in g1.states if state not in g.states]
@@ -110,7 +110,7 @@ def thompson(exp):
             print(len(graph_stack))
             g1 = graph_stack.pop()
             g2 = graph_stack.pop()
-            g = Parser()
+            g = Graph()
 
             g.Nodes = [node for node in g2.Nodes]
             g.alphabet = list(set().union(g1.alphabet, g2.alphabet))

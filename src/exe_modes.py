@@ -11,21 +11,21 @@ from pathlib import Path
 import codecs
 
 
-from Parser import Parser
+from src.Graph import Graph
 
-from Algorithms.acceptation import acceptation
-from Algorithms.determinisation import determinisation
-from Algorithms.acceptation import acceptation
-from Algorithms.synchronisation import synchronisation
-from Algorithms.minimisation import minimisation
-from Algorithms.thompson import thompson
+from src.Algorithms.acceptation import acceptation
+from src.Algorithms.determinisation import determinisation
+from src.Algorithms.acceptation import acceptation
+from src.Algorithms.synchronisation import synchronisation
+from src.Algorithms.minimisation import minimisation
+from src.Algorithms.thompson import thompson
 
-from Automate_from_json import generate_automate
-from Random_lang import generate_lang, valid_node
-from graph_to_json import getgraph, write_to_json_file
+from src.Automate_from_json import generate_automate
+from src.Random_lang import generate_lang, valid_node
+from src.graph_to_json import getgraph, write_to_json_file
 
 global files_path
-files_path = Path('..\\Files\\')
+files_path = Path('.\\Files\\')
 
 
 def read_files():
@@ -50,7 +50,7 @@ def read_files():
         # ouvrir en mode lecture
         with codecs.open(os.path.join(os.getcwd(), filename), encoding='utf-8') as f:
             # parse le fichier et récupérer l'alphabet, les noeuds et états finaux
-            graph = Parser(f)
+            graph = Graph(f)
             graph.parse()
             num_exo = filename.name.split('.')[0]
             name = filename.name.split('.')[0] + '.json'
@@ -61,9 +61,9 @@ def read_files():
 
             # Exécuter les algorithmes
             # synchronisation
-            eps = algos.synchronisation()
+            eps = synchronisation(graph)
             eps_json = getgraph(eps)
-            write_to_json_file("abab-sans-epsilon.json", eps_json)
+            write_to_json_file(num_exo+"-eps.json", eps_json)
 
             # determinisation
             det = determinisation(graph)
@@ -76,7 +76,7 @@ def read_files():
             write_to_json_file(num_exo+"-min.json", gmin_json)
 
             # acceptation
-            # algos.acceptation()
+            # res = acceptation(graph, ['abab', 'bab', 'bca'])
 
     generate_automate()
 
@@ -94,7 +94,7 @@ def gen_auto(n):
     i = 1
     while i < n+1:
         filename = "Ex1-" + str(i)
-        with open(os.path.join(os.getcwd(), '..\\Files\\' + filename + ".txt"), 'w') as outfile:
+        with open(os.path.join(os.getcwd(), '.\\Files\\' + filename + ".txt"), 'w') as outfile:
             g = generate_lang()
             final = " ".join(g.finalStates) + "\n"
             outfile.write(final)

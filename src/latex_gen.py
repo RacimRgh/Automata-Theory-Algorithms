@@ -4,13 +4,17 @@ Todo:
 from pylatex import *
 from pylatex.utils import bold
 import os
+from pathlib import Path
 
 global doc
 global geometry_options
 global image_filename
+global path
+path = Path('.\\Results\\')
 
 
 def generate_header():
+    global doc
     # Add document header
     header = PageStyle("header")
     # Create left header
@@ -44,42 +48,64 @@ def generate_header():
         doc.append(
             LargeText(bold("Examen de deuxieme session - Langages et automates")))
         doc.append(LineBreak())
-        doc.append(MediumText(bold("Mardi 12 juin 2018")))
+        doc.append(MediumText(bold("Mardi 16 avril 2021")))
 
 
 # def generate_exercise():
 #     with doc.create(Section('The simple stuff')):
 
 
-def generate_list():
+def generate_exercice(exo, images):
+    global doc, image_filename
+    corrections = ['det.png', 'min.png', 'eps.png']
+
+    image_filename = os.path.join(os.getcwd(), '.\\Results\\' + exo + '.png ')
+    image_det = os.path.join(os.getcwd(), '.\\Results\\' + exo + '-det.png ')
+    image_min = os.path.join(os.getcwd(), '.\\Results\\' + exo + '-min.png ')
+
     with doc.create(Section('Exercice 1')):
         with doc.create(Subsection("Soit l'automate suivant:")):
             with doc.create(Figure(position='h!')) as automate:
                 automate.add_image(image_filename, width='120px')
-        with doc.create(Enumerate(enumeration_symbol=r"\alph*)",
-                                  options={'start': 20})) as enum:
-            enum.add_item("Trouver l'automate deterministe.")
-            enum.add_item("Trouver l'automate minimal.")
+        with doc.create(Itemize()) as itemize:
+            # Question 1
+            itemize.add_item("Trouver l'automate deterministe.")
+            with doc.create(Figure(position='h!')) as automate:
+                automate.add_image(image_min, width='120px')
+            # Question 2
+            itemize.add_item("Trouver l'automate minimal.")
+            with doc.create(Figure(position='h!')) as automate:
+                automate.add_image(image_det, width='120px')
+            # Question 3
 
 
-if __name__ == '__main__':
-    image_filename = os.path.join(
-        os.path.dirname(__file__), '../Results/abab.png')
+def gen_exam():
+    global doc, image_filename, geometry_options
+    images = (
+        entry for entry in path.iterdir() if entry.is_file())
 
     geometry_options = {"margin": "0.7in"}
     doc = Document(geometry_options=geometry_options)
     generate_header()
-    generate_list()
-    doc.generate_pdf(filepath='../Exam_PDF/header', clean_tex=False)
+
+    for image in images:
+        num = image.name.split('.')
+        if len(num) > 1 and num[1] == 'png':
+            exo = num[0].split('-')
+            if (len(exo) == 2):
+                exo = "-".join(exo)
+                generate_exercice(exo, images)
+                doc.generate_pdf(filepath='./Exam_PDF/exam' +
+                                 exo[4], clean_tex=False)
     # doc = Document('basic')
-    # doc.generate_pdf(filepath='../Exam_PDF/header', clean_tex=False)
-    #     latex_document = '../Files/l2automates.exam2018.s2.tex'
+    # doc.generate_pdf(filepath='./Exam_PDF/header', clean_tex=False)
+    #     latex_document = './Files/l2automates.exam2018.s2.tex'
     #     with open(latex_document) as file:
     #         tex = file.read()
     #     doc.append(NoEscape(tex))
-    #     doc.generate_pdf(filepath='../Exam_PDF/abab', clean_tex=False)
+    #     doc.generate_pdf(filepath='./Exam_PDF/abab', clean_tex=False)
 
     # # geometry_options = {"tmargin": "0cm", "lmargin": "0cm"}
     # # doc = Document(geometry_options=geometry_options)
 
-    # # doc.generate_pdf(filepath='../Exam_PDF/abab', clean_tex=False)
+    # # doc.generate_pdf(filepath='./Exam_PDF/abab', clean_tex=False)

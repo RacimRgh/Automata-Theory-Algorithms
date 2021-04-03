@@ -11,7 +11,8 @@ Todo:
     * Ajouter d'autres modes d'execution
 """
 import sys
-from exe_modes import read_files, gen_auto, gen_thompson
+from src.exe_modes import read_files, gen_auto, gen_thompson
+from src.latex_gen import gen_exam
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -37,6 +38,8 @@ if __name__ == '__main__':
                 # gt = thompson('a+b')
                 # gt = thompson('a*.(a+b).b*')
                 # gen_thompson(sys.argv[2])
+        elif sys.argv[1] == '-e':
+            gen_exam()
 
         # main()
         # gt = thompson('a.(a+b)*.b')

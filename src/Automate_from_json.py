@@ -27,7 +27,7 @@ def generate_automate():
         * Trouver un moyen de mieux représenter l'état initial
 
     """
-    path = Path('..\\Results\\')
+    path = Path('.\\Results\\')
     input_json_files = (
         entry for entry in path.iterdir() if entry.is_file())
 

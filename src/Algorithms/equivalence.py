@@ -1,5 +1,5 @@
-from Node import Node
-from Parser import Parser
+from src.Node import Node
+from src.Graph import Graph
 
 
 def equivalence(graph1, graph2):

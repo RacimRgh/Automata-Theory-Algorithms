@@ -1,11 +1,11 @@
 import collections
 from itertools import combinations
-from Node import Node
-from Parser import Parser
+from src.Node import Node
+from src.Graph import Graph
 
 
 def minimisation(graph):
-    """Fonction de minimisation d'un automate
+    """Fonction de minimisation d'un automate.
 
     Algorithme calculant un automate déterministe minimal équivalent au premier.
 
@@ -69,7 +69,7 @@ def minimisation(graph):
 
         i = i + 1
     # Construire le graphe minimal
-    graph_min = Parser()
+    graph_min = Graph()
     for p in partitions:
         ns = ",".join(p)
         graph_min.states.append(ns)

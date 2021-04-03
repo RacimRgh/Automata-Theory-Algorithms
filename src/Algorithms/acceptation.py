@@ -1,5 +1,5 @@
-from Node import Node
-from Parser import Parser
+from src.Node import Node
+from src.Graph import Graph
 
 
 def acceptation(graph, words):
@@ -9,7 +9,7 @@ def acceptation(graph, words):
     le mot est accepté par l'automate.
 
     Args:
-        graph (Parser): Un automate sous forme d'objet de la classe Parser
+        graph (Graph): Un automate sous forme d'objet de la classe Graph
         words (list): Liste de mots à vérifier
 
     Returns:

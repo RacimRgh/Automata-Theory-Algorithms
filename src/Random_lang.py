@@ -6,8 +6,8 @@ Todo:
 """
 
 
-from Node import *
-from Parser import *
+from src.Node import *
+from src.Graph import *
 import random
 from random import seed
 from random import choice
@@ -28,7 +28,7 @@ def valid_node(g):
         * Etat puit 
 
     Args:
-        g (Parser): Un graphe généré automatiquement
+        g (Graph): Un graphe généré automatiquement
 
     Returns:
         boolean: true si graphe pertinent, false sinon
@@ -37,48 +37,36 @@ def valid_node(g):
     for state in g.states:
         sources = []
         destinations = []
+        # Les destinations de l'état courant, sans compter les boucles
         destinations = [
-            node.mGoto for node in g.Nodes if node.mFrom == state]
-        sources = [node.mFrom for node in g.Nodes if node.mGoto == state]
-
-        print(state, ' : destinations: ', destinations)
-        print(state, ' : sources: ', sources)
+            node.mGoto for node in g.Nodes if node.mFrom == state and node.mGoto != state]
+        # Les états qui vont vers l'état courant sans compter les boucles
+        sources = [
+            node.mFrom for node in g.Nodes if node.mGoto == state and node.mFrom != state]
 
         # Etat initial sans succéssseur à part lui même
         if (state == g.initialState):
-            if (len(destinations) == 0 or (len(destinations) == 1 and destinations[0] == state)):
-                print('\nHERE\n')
+            if (len(destinations) == 0):
                 return False
 
         # Etat final sans prédécesseur à part lui même
         if (state in g.finalStates):
-            if (len(sources) == 0 or (len(sources) == 1 and sources[0] == state)):
-                print('\nHERE1\n')
+            if (len(sources) == 0):
                 return False
 
-        # Etat sans successeur et pas final
-        if ((len(destinations) == 0 or (len(destinations) == 1 and destinations[0] == state)) and state not in g.finalStates):
-            print('\nHERE2\n')
+        # Etat sans successeur à part lui même et pas final
+        if (len(destinations) == 0 and state not in g.finalStates):
             return False
 
         # Etat isolé
-        node_sources = []
-        node_destinations = []
-        node_destinations = [node.mGoto for node in g.Nodes]
-        node_sources = [node.mFrom for node in g.Nodes]
-        if ((state not in node_destinations) and (state not in node_sources)):
-            print('\nHERE3\n')
+        if (len(destinations) == 0 and len(sources) == 0):
             return False
 
-        # # Etat source, sans noeud qui y va, et n'est pas initial = inaccessible
-        # elif (state in sources) and (state not in destinations) and (state != g.initialState):
-        #     return False
+        # Etat source, sans noeud qui y va, et n'est pas initial = inaccessible
+        if (len(sources) == 0 and state != g.initialState):
+            return False
+
     return True
-    # for state in g.states:
-    #     n = 0
-    #     for node in g.Nodes:
-    #         # état final sans successeur
-    #         if state in g.finalStates and
 
 
 def generate_lang():
@@ -91,17 +79,17 @@ def generate_lang():
     la fonction précédente
 
     Returns:
-        graphe: Graphe de la classe Parser
+        graphe: Graphe de la classe Graph
 
     """
     repeat = False
     while repeat == False:
 
-        n_states = random.randint(3, 8)
-        n_alphabet = random.randint(2, 4)
+        n_states = random.randint(4, 7)
+        n_alphabet = random.randint(2, 3)
         n_finaux = random.randint(1, 3)
-        n_nodes = random.randint(7, 14)
-        graph = Parser()
+        n_nodes = random.randint(7, 10)
+        graph = Graph()
 
         # Générer les lettres de l'alphabet
         for i in range(n_alphabet):
@@ -127,7 +115,4 @@ def generate_lang():
             graph.Nodes.remove(select_del)
 
         repeat = valid_node(graph)
-    # for tr in graph.Nodes:
-    #     print(graph.nodeToString(tr))
-    # print(len(graph.Nodes))
     return graph
