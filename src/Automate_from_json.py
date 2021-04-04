@@ -42,7 +42,7 @@ def generate_automate():
                     os.getcwd(), path), filename=name, format='png')
                 graph = json.load(f)
 
-                automate.attr('node', shape='egg')
+                automate.attr('node', shape='rarrow')
                 automate.node(graph['initial_state'])
 
                 automate.attr('node', shape='doublecircle')

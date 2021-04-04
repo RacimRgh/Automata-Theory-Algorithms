@@ -1,5 +1,5 @@
-class Node(object):
-    """Node: Un noeud
+class Transition(object):
+    """Transition: Un noeud
 
     Un noeud représente un état de départ, une lettre de l'alphabet
     à lire et un état d'arriver

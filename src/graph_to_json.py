@@ -27,7 +27,7 @@ def getgraph(graph):
     states = graph.getStates()
     # Récupérer les transitions
     # [ ["from", "value", "to"], .. ["from","value", "to"] ]
-    nodes = graph.getNodes()
+    nodes = graph.gettransitions()
     nodes = [[str(node.mFrom), str(node.mValue), str(node.mGoto)]
              for node in nodes]
 

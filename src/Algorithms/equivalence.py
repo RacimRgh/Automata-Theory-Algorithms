@@ -1,4 +1,4 @@
-from src.Node import Node
+from src.Transition import Transition
 from src.Graph import Graph
 
 

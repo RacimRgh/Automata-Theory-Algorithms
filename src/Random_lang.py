@@ -6,7 +6,7 @@ Todo:
 """
 
 
-from src.Node import *
+from src.Transition import *
 from src.Graph import *
 import random
 from random import seed
@@ -39,10 +39,10 @@ def valid_node(g):
         destinations = []
         # Les destinations de l'état courant, sans compter les boucles
         destinations = [
-            node.mGoto for node in g.Nodes if node.mFrom == state and node.mGoto != state]
+            node.mGoto for node in g.transitions if node.mFrom == state and node.mGoto != state]
         # Les états qui vont vers l'état courant sans compter les boucles
         sources = [
-            node.mFrom for node in g.Nodes if node.mGoto == state and node.mFrom != state]
+            node.mFrom for node in g.transitions if node.mGoto == state and node.mFrom != state]
 
         # Etat initial sans succéssseur à part lui même
         if (state == g.initialState):
@@ -100,7 +100,7 @@ def generate_lang():
             graph.states.append(str(i+1))
             for x in graph.alphabet:
                 for j in range(n_states+1):
-                    graph.Nodes.append(Node(str(i), x, str(j)))
+                    graph.transitions.append(Transition(str(i), x, str(j)))
 
         # Choisir les états finaux de l'automate
         for i in range(n_finaux):
@@ -110,9 +110,9 @@ def generate_lang():
 
         graph.initialState = choice(graph.states)
 
-        while(len(graph.Nodes) > n_nodes):
-            select_del = choice(graph.Nodes)
-            graph.Nodes.remove(select_del)
+        while(len(graph.transitions) > n_nodes):
+            select_del = choice(graph.transitions)
+            graph.transitions.remove(select_del)
 
         repeat = valid_node(graph)
     return graph

@@ -16,7 +16,7 @@ from src.Graph import Graph
 from src.Algorithms.acceptation import acceptation
 from src.Algorithms.determinisation import determinisation
 from src.Algorithms.acceptation import acceptation
-from src.Algorithms.synchronisation import synchronisation
+from src.Algorithms.synchronisation import synchronisation, clean_graph
 from src.Algorithms.minimisation import minimisation
 from src.Algorithms.thompson import thompson
 
@@ -66,7 +66,7 @@ def read_files():
             write_to_json_file(num_exo+"-eps.json", eps_json)
 
             # determinisation
-            det = determinisation(graph)
+            det = determinisation(eps)
             det_json = getgraph(det)
             write_to_json_file(num_exo+"-det.json", det_json)
 
@@ -98,7 +98,7 @@ def gen_auto(n):
             g = generate_lang()
             final = " ".join(g.finalStates) + "\n"
             outfile.write(final)
-            for node in g.Nodes:
+            for node in g.transitions:
                 outfile.write(
                     " ".join([node.mFrom, node.mValue, node.mGoto]) + "\n")
             i = i + 1
@@ -114,5 +114,20 @@ def gen_thompson(exp):
     """
     gt = thompson(exp)
     gt_json = getgraph(gt)
-    write_to_json_file("Thompson.json", gt_json)
+    write_to_json_file("Ex1-1-thompson.json", gt_json)
+
+    sync_th = synchronisation(gt)
+    sync_json = getgraph(sync_th)
+    write_to_json_file("Ex1-1-Thompson-sync.json", sync_json)
+
+    # determinisation
+    det = determinisation(sync_th)
+    det_json = getgraph(det)
+    write_to_json_file("Ex1-1-Thompson-det.json", det_json)
+
+    # Minimisation
+    gmin = minimisation(det)
+    gmin_json = getgraph(gmin)
+    write_to_json_file("Ex1-1-Thompson-min.json", gmin_json)
+
     generate_automate()

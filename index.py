@@ -20,7 +20,8 @@ if __name__ == '__main__':
         print(
             '\npython ./index -g <n>  \nn = nombre de langages à générer (Par défaut 3)\n')
         print('\npython ./index -f \nPour utiliser les fichiers de /Files/\n')
-        print('\npython ./index -t <exp> \n Pour générer un automate avec l\'expression régulière <exp>\n')
+        print('\npython ./index -t <exp> \nPour générer un automate avec l\'expression régulière <exp>\n')
+        print('\npython ./index -e\nPour générer un sujet d\'examen à partir des fichiers de Results\n')
     else:
         if sys.argv[1] == '-g':
             if len(sys.argv) < 3:

@@ -1,4 +1,4 @@
-from src.Node import Node
+from src.Transition import Transition
 from src.Graph import Graph
 
 
@@ -16,7 +16,7 @@ def acceptation(graph, words):
         dic: Dictionnaire ayant pour clés les mots donnés en paramètre, et
         comme valeur un booléen selon si il est accepté ou non.
     """
-    nodes = graph.getNodes()
+    nodes = graph.gettransitions()
     finalStates = graph.getFinalStates()
     alphabet = graph.getAlphabet()
     initialState = graph.getInitialState()
@@ -29,7 +29,7 @@ def acceptation(graph, words):
         mot = uInput
         print(mot)
         mot = mot + mot[-1]
-        currentNode = initialState
+        currentTransition = initialState
         error = False
         counter = 0
         for letter in mot:
@@ -37,14 +37,14 @@ def acceptation(graph, words):
             if letter in alphabet:
                 # Vérifier si la lettre est dans le noeud courant
                 for node in nodes:
-                    # print(type(str(node.mFrom)), type(currentNode))
-                    if node.mFrom == currentNode and node.mValue == letter:
+                    # print(type(str(node.mFrom)), type(currentTransition))
+                    if node.mFrom == currentTransition and node.mValue == letter:
                         print("Read {} from {} to {}".format(
                             node.mValue, node.mFrom, node.mGoto))
                         # Si c'est la dernière lettre du mot
                         if (counter == len(mot) - 1):
                             # Si état final alors mot accepté
-                            if (currentNode in finalStates):
+                            if (currentTransition in finalStates):
                                 break
                             else:
                                 print(
@@ -52,7 +52,7 @@ def acceptation(graph, words):
                                 error = True
                                 break
                         # Avencer le noeud
-                        currentNode = node.mGoto
+                        currentTransition = node.mGoto
                         break
             # Si mot pas dans le langage
             else:

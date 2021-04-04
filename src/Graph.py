@@ -1,4 +1,4 @@
-from src.Node import *
+from src.Transition import *
 
 
 class Graph(object):
@@ -8,7 +8,7 @@ class Graph(object):
     alphabet, les états et transitions
 
     Attributes:
-        Nodes (list): Liste des transitions de type 'Node'
+        transitions (list): Liste des transitions de type 'Transition'
         finalStates (list): Liste des états finaux (str)
         alphabet (list): L'alphabet du langage
         states (list): Liste des états de l'automate (str)
@@ -28,7 +28,7 @@ class Graph(object):
         """
         if (file):
             self.file = file
-        self.Nodes = []  # transitions
+        self.transitions = []  # transitions
         self.finalStates = []  # états finaux
         self.alphabet = []  # alphabet
         self.states = []  # états
@@ -60,7 +60,8 @@ class Graph(object):
                     if (line[0] != line[2]):
                         self.states.append(line[2])
 
-                    self.Nodes.append(Node(line[0], line[1], line[2]))
+                    self.transitions.append(
+                        Transition(line[0], line[1], line[2]))
 
                     if (line[1] not in self.alphabet):
                         self.alphabet.append(line[1])
@@ -71,7 +72,8 @@ class Graph(object):
                     if (line[2] not in self.states):
                         self.states.append(line[2])
 
-                    self.Nodes.append(Node(line[0], line[1], line[2]))
+                    self.transitions.append(
+                        Transition(line[0], line[1], line[2]))
 
                     if (line[1] not in self.alphabet):
                         self.alphabet.append(line[1])
@@ -93,7 +95,7 @@ class Graph(object):
 
         """
         transFromState = []
-        for node in self.getNodes():
+        for node in self.gettransitions():
             if (node.mFrom == state):
                 transFromState.append(node)
 
@@ -116,7 +118,7 @@ class Graph(object):
 
         """
         transFromState = []
-        for node in self.getNodes():
+        for node in self.gettransitions():
             if (node.mFrom == state and node.mValue == letter):
                 transFromState.append(node)
 
@@ -126,7 +128,7 @@ class Graph(object):
         """Fonction pour afficher un noeud en chaine de caractère
 
         Args:
-            node (Node): Un noeud (départ, lettre, arrivé)
+            node (Transition): Un noeud (départ, lettre, arrivé)
 
         Returns:
             str: Le noeud sous forme de chaine de caractères
@@ -145,8 +147,8 @@ class Graph(object):
     def getFinalStates(self):
         return self.finalStates
 
-    def getNodes(self):
-        return self.Nodes
+    def gettransitions(self):
+        return self.transitions
 
     def getStates(self):
         return self.states
@@ -162,8 +164,8 @@ class Graph(object):
     def setFinalStates(self, final_states):
         self.finalStates = final_states
 
-    def setNodes(self, nodes):
-        self.Nodes = nodes
+    def settransitions(self, nodes):
+        self.transitions = nodes
 
     def setStates(self, states):
         self.states = states
