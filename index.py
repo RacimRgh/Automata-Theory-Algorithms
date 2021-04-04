@@ -17,9 +17,9 @@ from src.latex_gen import gen_exam
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         print('\nVeuillez choisir le mode d\'execution:\n')
+        print('\npython ./index -f \nPour utiliser les fichiers de /Files/\n')
         print(
             '\npython ./index -g <n>  \nn = nombre de langages à générer (Par défaut 3)\n')
-        print('\npython ./index -f \nPour utiliser les fichiers de /Files/\n')
         print('\npython ./index -t <exp> \nPour générer un automate avec l\'expression régulière <exp>\n')
         print('\npython ./index -e\nPour générer un sujet d\'examen à partir des fichiers de Results\n')
         print('\npython ./index -q\nPour vérifier l\'équivalence de deux automate dans le dossier /Files/')

@@ -81,9 +81,13 @@ def generate_exercice(exo, images):
             itemize.add_item("Trouver l'automate deterministe.")
             # Question 2
             itemize.add_item("Trouver l'automate minimal.")
-            # Question 3
-            itemize.add_item(
-                "Trouver l'automate de thompson de l'expression: a(a+b)*b")
+    # Exercice 2
+    with doc.create(Section('Exercice 2')):
+        with doc.create(Subsection("Automate de Thompson")):
+            with doc.create(Itemize()) as itemize:
+                # Question 1
+                itemize.add_item(
+                    "Trouver l'automate de thompson de l'expression: a(a+b)*b")
 
 
 def generate_correction(exo, images):
@@ -97,9 +101,6 @@ def generate_correction(exo, images):
     image_min = os.path.join(os.getcwd(), '.\\Results\\' + exo + '-min.png ')
     # automate sans eps-transitions
     image_eps = os.path.join(os.getcwd(), '.\\Results\\' + exo + '-eps.png ')
-    # automate de thompson
-    image_thompson = os.path.join(
-        os.getcwd(), '.\\Results\\' + exo + '-thompson.png ')
     """
         Génération de la correction
     """
@@ -116,9 +117,12 @@ def generate_correction(exo, images):
             itemize_corr.add_item("Trouver l'automate minimal.")
             with doc_correction.create(Figure(position='h')) as automate_corr:
                 automate_corr.add_image(image_min, width='120px')
-            # Question 3
-            itemize_corr.add_item(
-                "Trouver l'automate de thompson de l'expression: a(a+b)*b")
+
+    # automate de thompson
+    image_thompson = os.path.join(
+        os.getcwd(), '.\\Results\\thompson.png')
+    with doc_correction.create(Section('Exercice 2')):
+        with doc_correction.create(Subsection("Trouver l'automate de thompson de l'expression: a(a+b)*b")):
             with doc_correction.create(Figure(position='h')) as automate_corr:
                 automate_corr.add_image(image_thompson, width='120px')
 
@@ -126,7 +130,7 @@ def generate_correction(exo, images):
 def gen_exam():
     global doc, doc_correction, image_filename, geometry_options
     images = (
-        entry for entry in path.iterdir() if entry.is_file())
+        entry for entry in path.iterdir() if entry.is_file() and "thompson" not in entry.name)
 
     geometry_options = {"margin": "0.7in"}
     doc = Document(geometry_options=geometry_options)

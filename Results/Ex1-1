@@ -1,0 +1,18 @@
+digraph finite_state_machine {
+	node [shape=rarrow]
+	0
+	node [shape=doublecircle]
+	4
+	2
+	node [shape=circle]
+	0 -> 2 [label=a]
+	1 -> 2 [label=a]
+	1 -> 1 [label=b]
+	2 -> 2 [label=a]
+	2 -> 3 [label=b]
+	2 -> 4 [label=b]
+	3 -> 1 [label=a]
+	3 -> 3 [label=a]
+	3 -> 0 [label=b]
+	3 -> 4 [label=b]
+}

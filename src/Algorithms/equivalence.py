@@ -15,14 +15,19 @@ def equivalence(graph1, graph2):
     graph2_min = graph2
 
     print("eq")
+    print('\n------------------------------------------------\n')
     if len(graph1_min.states) != len(graph2_min.states):
-        print('Nombre d\'états différent')
+        print('Pas d\'équivalance\nNombre d\'états différent')
+        print('\n------------------------------------------------\n')
+
         return False
 
     graph1_min.alphabet.sort()
     graph2_min.alphabet.sort()
     if graph1_min.alphabet != graph2_min.alphabet:
-        print('Alphabets différents')
+        print('\nPas d\'équivalence. Alphabets différents')
+        print('\n------------------------------------------------\n')
+
         return False
 
     queue1 = [graph1_min.initialState]
@@ -38,7 +43,9 @@ def equivalence(graph1, graph2):
             trans1 = graph1_min.getStateTransitionsLetter(current1, letter)
             trans2 = graph2_min.getStateTransitionsLetter(current2, letter)
             if len(trans1) != len(trans2):
-                print('Transitions différentes')
+                print('\nPas d\'équivalence. Transitions différentes\n')
+                print('\n------------------------------------------------\n')
+
                 return False
             elif len(trans1) != 0 and len(trans2) != 0:
                 dest1 = trans1[0].mGoto
@@ -66,6 +73,8 @@ def equivalence(graph1, graph2):
 
                 # Si les états sont de nature différente alors les automates ne sont pas équivalents
                 if type1[dest1] != type2[dest2]:
+                    print('\nAutomates pas équivalants\n')
+                    print('\n------------------------------------------------\n')
                     return False
 
                 done1.append(current1)
@@ -76,4 +85,6 @@ def equivalence(graph1, graph2):
                 if dest2 not in done2:
                     queue2.append(dest2)
     print('Les graphes sont équivalents!')
+    print('\n------------------------------------------------\n')
+
     return True

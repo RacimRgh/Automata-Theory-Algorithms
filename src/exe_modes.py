@@ -115,21 +115,21 @@ def gen_thompson(exp):
     """
     gt = thompson(exp)
     gt_json = getgraph(gt)
-    write_to_json_file("Ex1-1-thompson.json", gt_json)
+    write_to_json_file("thompson.json", gt_json)
 
     sync_th = synchronisation(gt)
     sync_json = getgraph(sync_th)
-    write_to_json_file("Ex1-1-Thompson-sync.json", sync_json)
+    write_to_json_file("thompson-sync.json", sync_json)
 
     # determinisation
     det = determinisation(sync_th)
     det_json = getgraph(det)
-    write_to_json_file("Ex1-1-Thompson-det.json", det_json)
+    write_to_json_file("thompson-det.json", det_json)
 
     # Minimisation
     gmin = minimisation(det)
     gmin_json = getgraph(gmin)
-    write_to_json_file("Ex1-1-Thompson-min.json", gmin_json)
+    write_to_json_file("thompson-min.json", gmin_json)
 
     generate_automate()
 
