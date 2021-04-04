@@ -79,6 +79,7 @@ def minimisation(graph):
     print(partitions)
     # Construire le graphe minimal
     graph_min = Graph()
+    graph_min.alphabet = alphabet
     for p in range(len(partitions)):
         graph_min.states.append(str(p+1))
         for fs in graph.finalStates:

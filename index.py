@@ -11,7 +11,7 @@ Todo:
     * Ajouter d'autres modes d'execution
 """
 import sys
-from src.exe_modes import read_files, gen_auto, gen_thompson
+from src.exe_modes import read_files, gen_auto, gen_thompson, check_equivalence
 from src.latex_gen import gen_exam
 
 if __name__ == '__main__':
@@ -22,6 +22,7 @@ if __name__ == '__main__':
         print('\npython ./index -f \nPour utiliser les fichiers de /Files/\n')
         print('\npython ./index -t <exp> \nPour générer un automate avec l\'expression régulière <exp>\n')
         print('\npython ./index -e\nPour générer un sujet d\'examen à partir des fichiers de Results\n')
+        print('\npython ./index -q\nPour vérifier l\'équivalence de deux automate dans le dossier /Files/')
     else:
         if sys.argv[1] == '-g':
             if len(sys.argv) < 3:
@@ -41,11 +42,5 @@ if __name__ == '__main__':
                 # gen_thompson(sys.argv[2])
         elif sys.argv[1] == '-e':
             gen_exam()
-
-        # main()
-        # gt = thompson('a.(a+b)*.b')
-        # gt = thompson('a+b')
-        # gt = thompson('a*.(a+b).b*')
-        # gt_json = getgraph(gt)
-        # write_to_json_file("Thompson.json", gt_json)
-        # generate_automate()
+        elif sys.argv[1] == '-q':
+            check_equivalence()

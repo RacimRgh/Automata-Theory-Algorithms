@@ -19,6 +19,7 @@ from src.Algorithms.acceptation import acceptation
 from src.Algorithms.synchronisation import synchronisation, clean_graph
 from src.Algorithms.minimisation import minimisation
 from src.Algorithms.thompson import thompson
+from src.Algorithms.equivalence import equivalence
 
 from src.Automate_from_json import generate_automate
 from src.Random_lang import generate_lang, valid_node
@@ -129,5 +130,55 @@ def gen_thompson(exp):
     gmin = minimisation(det)
     gmin_json = getgraph(gmin)
     write_to_json_file("Ex1-1-Thompson-min.json", gmin_json)
+
+    generate_automate()
+
+
+def check_equivalence():
+    input_files = (
+        entry for entry in files_path.iterdir() if entry.is_file())
+    # Parcours récursif de tout les fichiers dans le dossier Files
+    # 1 fichier == 1 langage/graphe
+    number_files = len(os.listdir(files_path))
+    if number_files != 2:
+        print('Veuillez mettre 2 automates dans le dossier /Files/.')
+    else:
+        graph1 = Graph()
+        graph2 = Graph()
+        num = 1
+        for filename in input_files:
+            # ouvrir en mode lecture
+            with codecs.open(os.path.join(os.getcwd(), filename), encoding='utf-8') as f:
+                # parse le fichier et récupérer l'alphabet, les noeuds et états finaux
+                graph = Graph(f)
+                graph.parse()
+                num_exo = filename.name.split('.')[0]
+                name = filename.name.split('.')[0] + '.json'
+                print(name)
+
+                json_graph = getgraph(graph)
+                write_to_json_file(name, json_graph)
+
+                # Exécuter les algorithmes
+                # synchronisation
+                eps = synchronisation(graph)
+                eps_json = getgraph(eps)
+                write_to_json_file(num_exo+"-eps.json", eps_json)
+
+                # determinisation
+                det = determinisation(eps)
+                det_json = getgraph(det)
+                write_to_json_file(num_exo+"-det.json", det_json)
+
+                # Minimisation
+                gmin = minimisation(det)
+                gmin_json = getgraph(gmin)
+                write_to_json_file(num_exo + "-min.json", gmin_json)
+                if num == 1:
+                    graph1 = gmin
+                    num += 1
+                else:
+                    graph2 = gmin
+        equivalence(graph1, graph2)
 
     generate_automate()
